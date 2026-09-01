@@ -10,7 +10,7 @@
 * **Universal Media Support:** Dynamically scrapes and parses both standard images (`.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`, `.svg`, `.bmp`, `.ico`, `.tiff`) and video files (`.mp4`, `.webm`, `.mov`, `.mkv`).
 * **Live Gallery Previews:** 
   * Images use native lazy loading (`loading="lazy"`) for zero-overhead performance.
-  * Videos automatically render as muted, looping, inline background previews with distinct format badges.
+  * Videos automatically render as muted, looping, inline background previews with distinct format badges. [Bugged - Needs meaningful optimisation changes and larger extension playback]
 * **Real-Time Filename Filtering:** A sticky search bar allows you to instantly narrow down large indexes by typing keywords or extensions (e.g., `.png`, `logo`, `cam01`).
 * **Interactive Lightbox & Arrow Navigation:** 
   * Click any item to inspect it in a full-screen, high-resolution lightbox.
