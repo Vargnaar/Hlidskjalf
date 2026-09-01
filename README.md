@@ -1,45 +1,35 @@
-A very lightweight, single-file JavaScript bookmarklet designed to instantly display media; built to make open directory enumeration a little smoother.
+# Hlidskjalf 👁️‍🗨️
 
-# Features
+**Hlidskjalf** is a modern, self-contained bookmarklet designed for fast media analysis on open directory listings, web archives, and asset indexes. Inspired by Odin's all-seeing seat, it instantly transforms raw, text-heavy directory lists into a sleek, responsive, hardware-accelerated visual dashboard without altering or destroying the underlying page DOM.
 
-Image Extraction: Automatically scans the current page for links ending in common image extensions (.jpg, .png, .gif, etc.).
+---
 
-Responsive Gallery: Displays extracted images in a clean, scrollable, and responsive grid layout.
+## ✨ Features & Upgrades (v2.1)
 
-Lazy Loading: Uses the Intersection Observer API for performance, only loading images as they scroll into the viewport.
+* **Non-Destructive UI Overlay:** Mounts cleanly over any open directory with a blurred dark-mode backdrop (`z-index: 999999`). Closing the interface returns you precisely to where you were in the directory tree.
+* **Universal Media Support:** Dynamically scrapes and parses both standard images (`.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`, `.svg`, `.bmp`, `.ico`, `.tiff`) and video files (`.mp4`, `.webm`, `.mov`, `.mkv`).
+* **Live Gallery Previews:** 
+  * Images use native lazy loading (`loading="lazy"`) for zero-overhead performance.
+  * Videos automatically render as muted, looping, inline background previews with distinct format badges.
+* **Real-Time Filename Filtering:** A sticky search bar allows you to instantly narrow down large indexes by typing keywords or extensions (e.g., `.png`, `logo`, `cam01`).
+* **Interactive Lightbox & Arrow Navigation:** 
+  * Click any item to inspect it in a full-screen, high-resolution lightbox.
+  * Cycle seamlessly through your filtered results using the **Left (`←`)** and **Right (`→`)** arrow keys.
+  * Use **Escape (`Esc`)** or click outside the media to exit.
+* **Direct Asset Downloader:** One-click download trigger built directly into the lightbox metadata panel.
 
-Image Count: Shows a sticky footer displaying the total number of images found.
+---
 
-Scroll to Top: Includes a "Back to Top" button in the footer for easy navigation.
+## 🚀 Installation & Usage
 
-# Installation & Usage
+1. Create a new bookmark in your browser toolbar and name it **Hlidskjalf**.
+2. Copy the minified bookmarklet string from the build or distribution file below.
+3. Paste the code into the bookmark's **URL/Location** field.
+4. Navigate to any open index or asset directory and click your bookmark to activate.
 
-This script is intended to be used as a Bookmarklet in your web browser.
+---
 
-1. Copy the Minified Code
+## 📦 The Bookmarklet Code (v2.1 Minified)
 
-The code must be minified and URL-encoded to work correctly as a bookmarklet. Copy the complete string below:
-```
-javascript:(function(){var baseUrl=location.href;var newWindow=window.open("","Gallery","width=900,height=700");var placeholder='data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';var sHTML='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Hlidskjalf | v1.5.3</title><base href="'+baseUrl+'"><style>body{margin:0;background-color:#1a1a1a;}.gallery{display:flex;flex-wrap:wrap;justify-content:center;margin-bottom:200px;}.gallery-item{width:250px;margin:10px;text-align:center;}img{max-width:100%;height:auto;}.footer{position:fixed;bottom:0;left:0;width:100%;z-index:1000;display:flex;justify-content:center;align-items:flex-end;}.footer .card,.footer .back-to-top{margin-left:10px;padding:5px 10px;background-color:#1a1a1a;border:1px solid #d0d0d0;border-top-left-radius:10px;border-top-right-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.3);font-family:Arial,sans-serif;font-weight:bold;text-align:center;color:white;}.footer .back-to-top{cursor:pointer;}</style></head><body><div class="gallery">';var imageCount=0;for(var x=0;x<document.links.length;x++){var a=document.links[x].href;if(a.match(/\.(jpeg|jpg|png|gif|bmp|tiff|tif|webp)$/i)){sHTML+='<div class="gallery-item"><a href="'+a+'" target="_blank"><img data-src="'+a+'" src="'+placeholder+'" alt="Image"></a></div>';imageCount++;}}sHTML+='</div><div class="footer"><div class="card">Total Images: '+imageCount+'</div><div class="back-to-top" onclick="window.scrollTo({top:0,behavior:\'smooth\'});">Back to Top</div></div><script>(function(){var images=document.querySelectorAll(\'img[data-src]\');var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){var img=entry.target;img.src=img.dataset.src;observer.unobserve(img);}});});images.forEach(function(img){observer.observe(img);});})();</script></body></html>';newWindow.document.write(sHTML);newWindow.document.close();})();
-
-```
-2. Create the Bookmark
-
-Open your browser's Bookmark Manager.
-
-Create a new bookmark.
-
-Set the Name to something memorable (e.g., Image Gallery).
-
-Paste the minified code (from Step 1) into the URL or Location field.
-
-Save the bookmark.
-
-3. Run the Script
-
-Navigate to any webpage that contains image links.
-
-Click the newly created Image Gallery bookmark.
-
-A new window will open displaying all discovered images.
-
+```javascript
+javascript:(function(){if(document.getElementById('hlid-v2'))return;const validExts=/\.(jpe?g|png|gif|webp|svg|bmp|ico|tiff|mp4|webm|mov|mkv)$/i;const allLinks=Array.from(document.querySelectorAll('a')).filter(a=>validExts.test(a.href));if(allLinks.length===0){alert('Hlidskjalf: No media targets found on this page.');return;}const container=document.createElement('div');container.id='hlid-v2';Object.assign(container.style,{position:'fixed',top:'0',left:'0',width:'100vw',height:'100vh',backgroundColor:'#121212',color:'#e0e0e0',zIndex:'999999',fontFamily:'system-ui, -apple-system, sans-serif',overflowY:'auto',margin:'0'});const style=document.createElement('style');style.textContent='.hlid-header{position:sticky;top:0;background:rgba(18,18,18,0.9);backdrop-filter:blur(8px);padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #333;z-index:10;}.hlid-title{font-weight:bold;font-size:18px;color:#fff;margin:0;}.hlid-controls{display:flex;gap:15px;align-items:center;}.hlid-search{padding:8px 12px;border-radius:6px;border:1px solid #444;background:#222;color:#fff;outline:none;width:250px;font-family:inherit;}.hlid-search:focus{border-color:#666;}.hlid-btn{padding:8px 16px;border-radius:6px;border:none;background:#333;color:#fff;cursor:pointer;font-weight:600;font-family:inherit;transition:background 0.2s;}.hlid-btn:hover{background:#444;}.hlid-btn-close{background:#600;}.hlid-btn-close:hover{background:#800;}.hlid-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px;padding:20px;}.hlid-item{display:flex;flex-direction:column;background:#1e1e1e;border:1px solid #333;border-radius:8px;overflow:hidden;transition:transform 0.2s,border-color 0.2s;cursor:pointer;position:relative;}.hlid-item:hover{transform:translateY(-3px);border-color:#666;}.hlid-media-wrapper{height:200px;display:flex;align-items:center;justify-content:center;background:#0a0a0a;overflow:hidden;position:relative;}.hlid-media-wrapper img,.hlid-media-wrapper video{max-width:100%;max-height:100%;object-fit:contain;}.hlid-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.7);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;text-transform:uppercase;font-weight:bold;}.hlid-filename{padding:10px;font-size:13px;color:#aaa;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-top:1px solid #333;}.hlid-lightbox{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.92);z-index:9999999;display:none;flex-direction:column;justify-content:center;align-items:center;}.hlid-lightbox.active{display:flex;}.hlid-lb-content-wrapper{max-width:90vw;max-height:80vh;display:flex;align-items:center;justify-content:center;}.hlid-lb-img,.hlid-lb-video{max-width:90vw;max-height:80vh;object-fit:contain;border-radius:4px;}.hlid-lb-meta{margin-top:20px;display:flex;gap:15px;align-items:center;}.hlid-lb-filename{font-size:16px;color:#fff;font-family:monospace;}';container.appendChild(style);const header=document.createElement('div');header.className='hlid-header';const title=document.createElement('div');title.innerHTML='<h1 class="hlid-title">Hlidskjalf v2.1 <span style="font-weight:normal;color:#888;font-size:14px;margin-left:10px;" id="hlid-count">'+allLinks.length+' items</span></h1>';const controls=document.createElement('div');controls.className='hlid-controls';const search=document.createElement('input');search.className='hlid-search';search.type='text';search.placeholder='Filter filenames...';const topBtn=document.createElement('button');topBtn.className='hlid-btn';topBtn.textContent='↑ Top';topBtn.onclick=()=>container.scrollTo({top:0,behavior:'smooth'});const closeBtn=document.createElement('button');closeBtn.className='hlid-btn hlid-btn-close';closeBtn.textContent='Close';closeBtn.onclick=()=>container.remove();controls.append(search,topBtn,closeBtn);header.append(title,controls);const gallery=document.createElement('div');gallery.className='hlid-gallery';const lightbox=document.createElement('div');lightbox.className='hlid-lightbox';lightbox.onclick=(e)=>{if(e.target===lightbox)lightbox.classList.remove('active');};const lbContentWrapper=document.createElement('div');lbContentWrapper.className='hlid-lb-content-wrapper';const lbMeta=document.createElement('div');lbMeta.className='hlid-lb-meta';const lbFilename=document.createElement('div');lbFilename.className='hlid-lb-filename';const lbDownload=document.createElement('button');lbDownload.className='hlid-btn';lbDownload.textContent='Download';lbMeta.append(lbFilename,lbDownload);lightbox.append(lbContentWrapper,lbMeta);let activeLinks=[];let currentIndex=0;const showLightbox=(index)=>{if(index<0)index=activeLinks.length-1;if(index>=activeLinks.length)index=0;currentIndex=index;const link=activeLinks[currentIndex];const filename=decodeURIComponent(link.href.split('/').pop()||link.href);const isVideo=/\.(mp4|webm|mov|mkv)$/i.test(link.href);lbContentWrapper.innerHTML='';if(isVideo){const vid=document.createElement('video');vid.className='hlid-lb-video';vid.src=link.href;vid.controls=true;vid.autoplay=true;lbContentWrapper.appendChild(vid);}else{const img=document.createElement('img');img.className='hlid-lb-img';img.src=link.href;lbContentWrapper.appendChild(img);}lbFilename.textContent='['+(currentIndex+1)+'/'+activeLinks.length+'] '+filename;lbDownload.onclick=()=>{const a=document.createElement('a');a.href=link.href;a.download=filename;a.target='_blank';a.click();};lightbox.classList.add('active');};document.addEventListener('keydown',(e)=>{if(!lightbox.classList.contains('active'))return;if(e.key==='ArrowRight'){showLightbox(currentIndex+1);}else if(e.key==='ArrowLeft'){showLightbox(currentIndex-1);}else if(e.key==='Escape'){lightbox.classList.remove('active');}});const renderGallery=(filter='')=>{gallery.innerHTML='';const lowerFilter=filter.toLowerCase();activeLinks=allLinks.filter(link=>{const filename=decodeURIComponent(link.href.split('/').pop()\vert{}\vert{}link.href);return !filter\vert{}\vert{}filename.toLowerCase().includes(lowerFilter);});document.getElementById('hlid-count').textContent=activeLinks.length+' items';activeLinks.forEach((link,idx)=>{const filename=decodeURIComponent(link.href.split('/').pop()\vert{}\vert{}link.href);const isVideo=/\.(mp4\vert{}webm\vert{}mov\vert{}mkv)$/i.test(link.href);const item=document.createElement('div');item.className='hlid-item';item.onclick=()=>showLightbox(idx);const mediaWrapper=document.createElement('div');mediaWrapper.className='hlid-media-wrapper';if(isVideo){const vid=document.createElement('video');vid.src=link.href;vid.muted=true;vid.loop=true;vid.autoplay=true;vid.playsInline=true;mediaWrapper.appendChild(vid);const badge=document.createElement('div');badge.className='hlid-badge';badge.textContent='Video';mediaWrapper.appendChild(badge);}else{const img=document.createElement('img');img.src=link.href;img.loading='lazy';mediaWrapper.appendChild(img);}const nameDiv=document.createElement('div');nameDiv.className='hlid-filename';nameDiv.textContent=filename;nameDiv.title=filename;item.append(mediaWrapper,nameDiv);gallery.appendChild(item);});};search.addEventListener('input',(e)=>renderGallery(e.target.value));renderGallery();container.append(header,gallery,lightbox);document.body.appendChild(container);})();
